@@ -1,5 +1,6 @@
 package example.com.myapplication;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -18,24 +19,27 @@ public class MainActivity extends AppCompatActivity {
 
 
     List<DataItem> dataItemList  = SampleDataProvider.dataItemList;
-    List<String> itemNames = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-     for(DataItem item: dataItemList)
-     {
-         itemNames.add(item.getItemName());
-     }
+        Collections.sort(dataItemList, new Comparator<DataItem>() {
+            @Override
+            public int compare(DataItem o1, DataItem o2) {
+                return o1.getItemName().compareTo(o2.getItemName());
+            }
+        });
 
-     Collections.sort(itemNames);
+        DataItemAdapter adapter = new DataItemAdapter(this, dataItemList);
 
         ListView listView = (ListView) findViewById(android.R.id.list);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1 , itemNames);
-
         listView.setAdapter(adapter);
+
+
+
+
 
 
 
