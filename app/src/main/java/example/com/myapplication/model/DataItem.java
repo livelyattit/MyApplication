@@ -1,5 +1,7 @@
 package example.com.myapplication.model;
 
+import java.util.UUID;
+
 /**
  * Created by affan_ui693t9 on 2/28/2018.
  */
@@ -19,6 +21,11 @@ public class DataItem {
     }
 
     public DataItem(String itemId, String itemName, String description, String category, int sortPosition, double price, String image) {
+
+        if (itemId == null) {
+
+            itemId = UUID.randomUUID().toString();
+        }
         this.itemId = itemId;
         this.itemName = itemName;
         this.description = description;
