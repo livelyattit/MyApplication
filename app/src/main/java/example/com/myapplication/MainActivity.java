@@ -1,13 +1,10 @@
 package example.com.myapplication;
 
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -33,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
         DataItemAdapter adapter = new DataItemAdapter(this, dataItemList);
 
-        ListView listView = (ListView) findViewById(android.R.id.list);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rvItems);
 
-        listView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
 
 
 

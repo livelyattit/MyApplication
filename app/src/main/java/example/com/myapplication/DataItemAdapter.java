@@ -2,78 +2,92 @@ package example.com.myapplication;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+
 import example.com.myapplication.model.DataItem;
 
 /**
- * Created by affan_ui693t9 on 2/27/2018.
+ * Created by affan_ui693t9 on 3/1/2018.
  */
 
-public class DataItemAdapter extends ArrayAdapter<DataItem> {
+public class DataItemAdapter extends RecyclerView.Adapter<DataItemAdapter.ViewHolder> {
 
-    List<DataItem> mDataItems;
-    LayoutInflater  mInflater;
+    private List<DataItem> mItems;
+    private Context mContext;
 
-    public DataItemAdapter(@NonNull Context context, @NonNull List<DataItem> objects) {
-
-        super(context, R.layout.list_item, objects);
-
-        mDataItems = objects;
-        mInflater = LayoutInflater.from(context);
-
-
+    public DataItemAdapter(Context context, List<DataItem> items) {
+        this.mContext = context;
+        this.mItems = items;
     }
 
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public DataItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        View itemView = inflater.inflate(R.layout.list_item, parent, false);
+        ViewHolder viewHolder = new ViewHolder(itemView);
+        return viewHolder;
+    }
 
-        if (convertView == null) {
+    @Override
+    public void onBindViewHolder(DataItemAdapter.ViewHolder holder, int position) {
+        final DataItem item = mItems.get(position);
 
-            convertView = mInflater.inflate(R.layout.list_item ,parent , false);
-        }
-
-        TextView tvName = convertView.findViewById(R.id.itemNameText);
-        ImageView imageView = convertView.findViewById(R.id.imageView);
-
-        DataItem item = mDataItems.get(position);
-
-        tvName.setText(item.getItemName());
-        InputStream inputStream = null;
         try {
+            holder.tvName.setText(item.getItemName());
             String imageFile = item.getImage();
-
-            inputStream = getContext().getAssets().open(imageFile);
-            Drawable d = Drawable.createFromStream(inputStream , null);
-            imageView.setImageDrawable(d);
+            InputStream inputStream = mContext.getAssets().open(imageFile);
+            Drawable d = Drawable.createFromStream(inputStream, null);
+            holder.imageView.setImageDrawable(d);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        finally {
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext,"this is onclick"+ item.getItemName() , Toast.LENGTH_SHORT).show();
 
-            try {
-                if (inputStream != null) {
-
-                    inputStream.close();
-
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        }
+        });
 
-        return convertView;
+        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                Toast.makeText(mContext, "You Selected" + item.getItemName(), Toast.LENGTH_LONG);
+                return false;
+            }
+        });
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return mItems.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView tvName;
+        public ImageView imageView;
+        public View mView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            tvName = (TextView) itemView.findViewById(R.id.itemNameText);
+            imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            mView = itemView;
+        }
     }
 }
