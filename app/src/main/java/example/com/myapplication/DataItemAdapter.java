@@ -23,7 +23,8 @@ import example.com.myapplication.model.DataItem;
 
 public class DataItemAdapter extends RecyclerView.Adapter<DataItemAdapter.ViewHolder> {
 
-    public static final String INTENT_ID_KEY = "ITEM_ID_KEY";
+
+    public static final String ITEM_KEY ="item_key" ;
     private List<DataItem> mItems;
     private Context mContext;
 
@@ -42,6 +43,8 @@ public class DataItemAdapter extends RecyclerView.Adapter<DataItemAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(DataItemAdapter.ViewHolder holder, int position) {
+
+
         final DataItem item = mItems.get(position);
 
         try {
@@ -59,9 +62,8 @@ public class DataItemAdapter extends RecyclerView.Adapter<DataItemAdapter.ViewHo
             public void onClick(View v) {
                 //Toast.makeText(mContext,"this is onclick"+ item.getItemName() , Toast.LENGTH_SHORT).show();
 
-                String itemId = item.getItemId();
                 Intent intent = new Intent(mContext,DetailActivity.class);
-                intent.putExtra(INTENT_ID_KEY,itemId);
+                intent.putExtra(ITEM_KEY,item);
                mContext.startActivity(intent);
             }
         });

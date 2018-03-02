@@ -14,9 +14,17 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        String itemId = getIntent().getExtras().getString(DataItemAdapter.INTENT_ID_KEY);
-        DataItem item = SampleDataProvider.dataItemMap.get(itemId);
+    DataItem item = getIntent().getExtras().getParcelable(DataItemAdapter.ITEM_KEY);
 
-        Toast.makeText(this,"Recieved Item " + item.getItemName(), Toast.LENGTH_LONG).show();
+        if (item != null) {
+
+
+            Toast.makeText(this,"Recieved Item " + item.getItemName(), Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(this,"DIDNT Recieved Item ", Toast.LENGTH_LONG).show();
+        }
+
     }
 }
